@@ -35,8 +35,8 @@
 typedef struct {
 	int16_t temperature;
 	uint8_t humidity;
-	uint16_t wind_speed;
-	uint16_t gust_speed;
+	uint32_t wind_speed;
+	uint32_t gust_speed;
 	uint32_t rain;
 	bool battery_low;
 	uint8_t wind_direction;

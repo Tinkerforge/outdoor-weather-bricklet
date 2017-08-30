@@ -98,8 +98,8 @@ typedef struct {
 	TFPMessageHeader header;
 	int16_t temperature;
 	uint8_t humidity;
-	uint16_t wind_speed;
-	uint16_t gust_speed;
+	uint32_t wind_speed;
+	uint32_t gust_speed;
 	uint32_t rain;
 	uint8_t wind_direction;
 	bool battery_low;
@@ -125,8 +125,8 @@ typedef struct {
 	uint8_t identifier;
 	int16_t temperature;
 	uint8_t humidity;
-	uint16_t wind_speed;
-	uint16_t gust_speed;
+	uint32_t wind_speed;
+	uint32_t gust_speed;
 	uint32_t rain;
 	uint8_t wind_direction;
 	bool battery_low;

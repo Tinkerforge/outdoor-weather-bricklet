@@ -110,7 +110,7 @@ class BrickletOutdoorWeather(Device):
         self.response_expected[BrickletOutdoorWeather.FUNCTION_READ_UID] = BrickletOutdoorWeather.RESPONSE_EXPECTED_ALWAYS_TRUE
         self.response_expected[BrickletOutdoorWeather.FUNCTION_GET_IDENTITY] = BrickletOutdoorWeather.RESPONSE_EXPECTED_ALWAYS_TRUE
 
-        self.callback_formats[BrickletOutdoorWeather.CALLBACK_WEATHER_STATION_DATA] = 'B h B H H I B !'
+        self.callback_formats[BrickletOutdoorWeather.CALLBACK_WEATHER_STATION_DATA] = 'B h B I I I B !'
 
 
     def get_weather_station_identifiers_low_level(self):
@@ -123,7 +123,7 @@ class BrickletOutdoorWeather(Device):
         """
 
         """
-        return GetWeatherStationData(*self.ipcon.send_request(self, BrickletOutdoorWeather.FUNCTION_GET_WEATHER_STATION_DATA, (identifier,), 'B', 'h B H H I B ! H'))
+        return GetWeatherStationData(*self.ipcon.send_request(self, BrickletOutdoorWeather.FUNCTION_GET_WEATHER_STATION_DATA, (identifier,), 'B', 'h B I I I B ! H'))
 
     def set_weather_station_callback_configuration(self, enable_callback):
         """

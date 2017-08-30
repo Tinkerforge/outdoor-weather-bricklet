@@ -154,9 +154,9 @@ void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet)
 
 	// Convert values to proper SI units, humidity is already in %rel
 	packet->temperature = packet->temperature - 400; // °C/10
-	packet->wind_speed  = packet->wind_speed*34/100; // m/s
-	packet->gust_speed  = packet->gust_speed*34/100; // m/s
-	packet->rain        = packet->rain*3/10;         // mm
+	packet->wind_speed  = packet->wind_speed*340/100; // m/10s
+	packet->gust_speed  = packet->gust_speed*340/100; // m/10s
+	packet->rain        = packet->rain*30/10;         // mm/10
 }
 
 void rfm210_init(RFM210 *rfm210) {
