@@ -30,6 +30,8 @@
 #include "xmc_eru.h"
 #include "xmc_ccu4.h"
 
+#include "communication.h"
+
 
 // OOK format:
 // High:   |^|__| -> 500us  | 1000us
@@ -59,6 +61,102 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) rf
 	rfm210.timestamps[rfm210.timestamp_end] = CCU40_CC41->TIMER;
 	rfm210.timestamp_end = (rfm210.timestamp_end+1) & RFM210_TIMESTAMP_MASK;
 	XMC_GPIO_SetOutputLow(P0_0);
+}
+
+
+
+static uint8_t rfm210_crc8(const uint8_t *data, const uint8_t length) {
+	uint8_t crc = 0;
+
+	for(uint8_t i = 0; i < length; i++) {
+		uint8_t byte = data[i];
+		for(uint8_t j = 0; j < 8; j++) {
+			bool mix = (crc ^ byte) & 0x80;
+			crc <<= 1;
+			if(mix) {
+				crc ^= 0x31;
+			}
+			byte <<= 1;
+		}
+	}
+
+	return crc;
+}
+
+static void rfm210_print_packet(RFM210Packet *packet, uint8_t id) {
+	logd("RFM210 packet (%d):\n\r", id);
+	logd(" temperature:          %u\n\r", packet->temperature);
+	logd(" humidity:             %u\n\r", packet->humidity);
+	logd(" wind_speed:           %u\n\r", packet->wind_speed);
+	logd(" gust_speed:           %u\n\r", packet->gust_speed);
+	logd(" rain                  %u\n\r", packet->rain);
+	logd(" battery_low:          %u\n\r", packet->battery_low);
+	logd(" wind_direction:       %u\n\r", packet->wind_direction);
+	logd("\n\r");
+}
+
+static void rfm210_reset(RFM210 *rfm210) {
+	memset(rfm210->data, 0, RFM210_DATA_SIZE);
+
+	rfm210->data_index = 0;
+	rfm210->data_bit   = 1;
+	rfm210->data[0]    = 1 << 7;
+}
+
+static uint32_t rfm210_get_next_timestamp_index(RFM210 *rfm210, uint32_t index) {
+	return (index + 1) & RFM210_TIMESTAMP_MASK;
+}
+
+#define NIBBLE_LOW(value) ((value >> 4) & 0xF)
+#define NIBBLE_HIGH(value) (value & 0xF)
+static void rfm210_check_data(RFM210 *rfm210) {
+	logd("data: "); log_array_u8(rfm210->data, 11, true);
+	logd("crc: %d\n\r", rfm210_crc8(&rfm210->data[1], 9));
+	// Check preamble, family code and CRC
+	if((rfm210->data[0] != 0xFF) ||
+	   ((rfm210->data[1] >> 4) != RFM210_WEATHER_STATION_FAMILY_CODE) ||
+	   (rfm210_crc8(&rfm210->data[1], 9) != rfm210->data[10])) {
+		return;
+	}
+
+	const uint8_t id = (NIBBLE_HIGH(rfm210->data[1]) << 4) | NIBBLE_LOW(rfm210->data[2]);
+
+	memcpy(&rfm210->payload[id][0], &rfm210->data[2], 8);
+	rfm210->payload_last_change[id] = system_timer_get_ms();
+
+	// Testing
+	RFM210Packet packet;
+	rfm210_fill_packet(rfm210, id, &packet);
+	rfm210_print_packet(&packet, id);
+}
+
+void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet) {
+	uint8_t *data = &rfm210->payload[id][0];
+
+	packet->temperature       = ((NIBBLE_HIGH(data[0]) & 0x3) << 8) | (NIBBLE_LOW(data[1])  << 4) |  NIBBLE_HIGH(data[1]);
+	packet->humidity          = (NIBBLE_LOW(data[2]) << 4)          |  NIBBLE_HIGH(data[2]);
+	packet->wind_speed        = (NIBBLE_LOW(data[3]) << 4)          |  NIBBLE_HIGH(data[3]);
+	packet->gust_speed        = (NIBBLE_LOW(data[4]) << 4)          |  NIBBLE_HIGH(data[4]);
+	packet->rain              = (NIBBLE_LOW(data[5]) << 12)         | (NIBBLE_HIGH(data[5]) << 8) | (NIBBLE_LOW(data[6]) << 4) | NIBBLE_HIGH(data[6]);
+	packet->battery_low       =  NIBBLE_LOW(data[7]) & (1 << 0);
+	packet->wind_direction    =  NIBBLE_HIGH(data[7]);
+
+
+	// TODO: What are these temperature flags and how can we handle them?
+//	bool temperature_flag1    = NIBBLE_HIGH(rfm210->data[2]) & (1 << 3);
+//	bool temperature_flag2    = NIBBLE_HIGH(rfm210->data[2]) & (1 << 2);
+	bool wind_direction_error =  NIBBLE_LOW(data[7]) & (1 << 3);
+
+	// Handle wind direction errors
+	if(wind_direction_error || (packet->wind_direction > OUTDOOR_WEATHER_WIND_DIRECTION_NNW)) {
+		packet->wind_direction = OUTDOOR_WEATHER_WIND_DIRECTION_ERROR;
+	}
+
+	// Convert values to proper SI units, humidity is already in %rel
+	packet->temperature = packet->temperature - 400; // °C/10
+	packet->wind_speed  = packet->wind_speed*34/100; // m/s
+	packet->gust_speed  = packet->gust_speed*34/100; // m/s
+	packet->rain        = packet->rain*3/10;         // mm
 }
 
 void rfm210_init(RFM210 *rfm210) {
@@ -168,81 +266,6 @@ void rfm210_init(RFM210 *rfm210) {
     XMC_CCU4_SLICE_StartTimer(CCU40_CC41);
 }
 
-uint8_t rfm210_crc8(const uint8_t *data, const uint8_t length) {
-	uint8_t crc = 0;
-
-	for(uint8_t i = 0; i < length; i++) {
-		uint8_t byte = data[i];
-		for(uint8_t j = 0; j < 8; j++) {
-			bool mix = (crc ^ byte) & 0x80;
-			crc <<= 1;
-			if(mix) {
-				crc ^= 0x31;
-			}
-			byte <<= 1;
-		}
-	}
-
-	return crc;
-}
-
-char *direction_name[] = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
-
-void rfm210_print_packet(RFM210Packet *packet) {
-	logd("RFM210 packet:\n\r");
-	logd(" preamble:             %u\n\r", packet->preamble);
-	logd(" family_code:          %u\n\r", packet->family_code);
-	logd(" device_id:            %u\n\r", packet->device_id);
-	logd(" temperature:          %u\n\r", packet->temperature);           // -400
-	logd(" temperature_flag1:    %u\n\r", packet->temperature_flag1);
-	logd(" temperature_flag2:    %u\n\r", packet->temperature_flag2);
-	logd(" humidity:             %u\n\r", packet->humidity);
-	logd(" wind_speed:           %u\n\r", packet->wind_speed);            // *34/100 m/s
-	logd(" gust:                 %u\n\r", packet->gust);                  // *34/100 m/s
-	logd(" rain_counter:         %u\n\r", packet->rain_counter);          // *0.3 ???
-	logd(" wind_direction_error: %u\n\r", packet->wind_direction_error);
-	logd(" low_battery:          %u\n\r", packet->low_battery);
-	logd(" wind_direction:       %u\n\r", packet->wind_direction);
-	logd(" crc:                  %u\n\r", packet->crc);
-	logd("\n\r");
-}
-
-void rfm210_reset(RFM210 *rfm210) {
-	memset(rfm210->data, 0, RFM210_DATA_SIZE);
-
-	rfm210->data_index = 0;
-	rfm210->data_bit   = 1;
-	rfm210->data[0]    = 1 << 7;
-}
-
-#define NIBBLE_LOW(value) ((value >> 4) & 0xF)
-#define NIBBLE_HIGH(value) (value & 0xF)
-void rfm210_check_data(RFM210 *rfm210) {
-	RFM210Packet *packet         = &rfm210->packet;
-	packet->preamble             = (NIBBLE_HIGH(rfm210->data[0]) << 4)         |  NIBBLE_LOW(rfm210->data[0]);
-	packet->family_code          =  NIBBLE_LOW(rfm210->data[1]);
-	packet->device_id            = (NIBBLE_HIGH(rfm210->data[1]) << 4)         |  NIBBLE_LOW(rfm210->data[2]);
-	packet->temperature          = ((NIBBLE_HIGH(rfm210->data[2]) & 0x3) << 8) | (NIBBLE_LOW(rfm210->data[3])  << 4) |  NIBBLE_HIGH(rfm210->data[3]);
-	packet->temperature_flag1    = NIBBLE_HIGH(rfm210->data[2]) & (1 << 3);
-	packet->temperature_flag2    = NIBBLE_HIGH(rfm210->data[2]) & (1 << 2);
-	packet->humidity             = (NIBBLE_LOW(rfm210->data[4]) << 4)          |  NIBBLE_HIGH(rfm210->data[4]);
-	packet->wind_speed           = (NIBBLE_LOW(rfm210->data[5]) << 4)          |  NIBBLE_HIGH(rfm210->data[5]);
-	packet->gust                 = (NIBBLE_LOW(rfm210->data[6]) << 4)          |  NIBBLE_HIGH(rfm210->data[6]);
-	packet->rain_counter         = (NIBBLE_LOW(rfm210->data[7]) << 12)         | (NIBBLE_HIGH(rfm210->data[7]) << 8) | (NIBBLE_LOW(rfm210->data[8]) << 4) | NIBBLE_HIGH(rfm210->data[8]);
-	packet->wind_direction_error =  NIBBLE_LOW(rfm210->data[9]) & (1 << 3);
-	packet->low_battery          =  NIBBLE_LOW(rfm210->data[9]) & (1 << 0);
-	packet->wind_direction       =  NIBBLE_HIGH(rfm210->data[9]);
-	packet->crc                  = (NIBBLE_LOW(rfm210->data[10]) << 4)         |  NIBBLE_HIGH(rfm210->data[10]);
-
-	logd("data: "); log_array_u8(rfm210->data, 11, true);
-	logd("crc: %u\n\r", rfm210_crc8(&rfm210->data[1], 9));
-	rfm210_print_packet(packet);
-}
-
-uint32_t rfm210_get_next_timestamp_index(RFM210 *rfm210, uint32_t index) {
-	return (index + 1) & RFM210_TIMESTAMP_MASK;
-}
-
 void rfm210_tick(RFM210 *rfm210) {
 	while(true) {
 		uint32_t start = rfm210->timestamp_start;
@@ -300,17 +323,4 @@ void rfm210_tick(RFM210 *rfm210) {
 		rfm210->timestamp_start = nextnext;
 	}
 	XMC_GPIO_SetOutputLow(P0_1);
-
-#if 0
-	if(rfm210->timestamp_start != rfm210->timestamp_end) {
-		uint32_t last = (rfm210->timestamp_start-1) & RFM210_TIMESTAMP_MASK;
-		uint32_t difference = (rfm210->timestamps[rfm210->timestamp_start] - rfm210->timestamps[last]) & 0xFFFF;
-		if(difference > 40 && difference < 160) {
-			logd("delta %u: %u\n\r", rfm210->timestamp_start, difference);
-		}
-		rfm210->timestamp_start = (rfm210->timestamp_start + 1) & RFM210_TIMESTAMP_MASK;
-	} else {
-		break;
-	}
-#endif
 }
