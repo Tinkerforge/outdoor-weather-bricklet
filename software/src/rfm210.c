@@ -48,10 +48,9 @@
 
 extern RFM210 rfm210;
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) rfm210_recv_handler(void) {
-	XMC_GPIO_SetOutputHigh(P0_0);
 	// Always write changes from low to high in even array index
 	// and changes from high to low in odd array index.
-	// If the edge changed too fast for the interrupt, we will the missed
+	// If the edge changed too fast for the interrupt, we will fill the missed
 	// index up with the current time too.
 	if(( XMC_GPIO_GetInput(RFM210_RECV_PIN) && (  rfm210.timestamp_end & 1)) ||
 	   (!XMC_GPIO_GetInput(RFM210_RECV_PIN) && (!(rfm210.timestamp_end & 1)))) {
@@ -60,7 +59,6 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) rf
 	}
 	rfm210.timestamps[rfm210.timestamp_end] = CCU40_CC41->TIMER;
 	rfm210.timestamp_end = (rfm210.timestamp_end+1) & RFM210_TIMESTAMP_MASK;
-	XMC_GPIO_SetOutputLow(P0_0);
 }
 
 
@@ -160,15 +158,6 @@ void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet)
 }
 
 void rfm210_init(RFM210 *rfm210) {
-	// Testing
-
-	const XMC_GPIO_CONFIG_t recv_toggle_pin_config = {
-		.mode         = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
-		.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW,
-	};
-	XMC_GPIO_Init(P0_0, &recv_toggle_pin_config);
-	XMC_GPIO_Init(P0_1, &recv_toggle_pin_config);
-
 	// ************** Data ****************
 	memset(rfm210, 0, sizeof(RFM210));
 
@@ -248,7 +237,7 @@ void rfm210_init(RFM210 *rfm210) {
     // Slice 0: Count from 0 to 480 (10us) TODO: Change to 320 for smalle MCU
     XMC_CCU4_EnableClock(CCU40, 0);
     XMC_CCU4_SLICE_CompareInit(CCU40_CC40, &timer0_config);
-    XMC_CCU4_SLICE_SetTimerPeriodMatch(CCU40_CC40, 480);
+    XMC_CCU4_SLICE_SetTimerPeriodMatch(CCU40_CC40, 320);
     XMC_CCU4_SLICE_SetTimerCompareMatch(CCU40_CC40, 0);
     XMC_CCU4_EnableShadowTransfer(CCU40, XMC_CCU4_SHADOW_TRANSFER_SLICE_0 | XMC_CCU4_SHADOW_TRANSFER_PRESCALER_SLICE_0);
 
@@ -287,6 +276,7 @@ void rfm210_tick(RFM210 *rfm210) {
 
 		uint32_t time_diff1 = (rfm210->timestamps[next] - rfm210->timestamps[start]) & 0xFFFF;
 		uint32_t time_diff2 = (rfm210->timestamps[nextnext] - rfm210->timestamps[next]) & 0xFFFF;
+
 
 		if((time_diff2 < RFM210_OOK_OFF-RFM210_TIME_DELTA) ||
 		   (time_diff2 > RFM210_OOK_OFF+RFM210_TIME_DELTA)) {
