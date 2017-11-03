@@ -81,8 +81,8 @@ static uint8_t rfm210_crc8(const uint8_t *data, const uint8_t length) {
 	return crc;
 }
 
-static void rfm210_print_packet(RFM210Packet *packet, uint8_t id) {
-	logd("RFM210 packet (%d):\n\r", id);
+static void rfm210_print_packet_station(RFM210PacketStation *packet, uint8_t id) {
+	logd("RFM210 station packet (%d):\n\r", id);
 	logd(" temperature:          %u\n\r", packet->temperature);
 	logd(" humidity:             %u\n\r", packet->humidity);
 	logd(" wind_speed:           %u\n\r", packet->wind_speed);
@@ -90,6 +90,13 @@ static void rfm210_print_packet(RFM210Packet *packet, uint8_t id) {
 	logd(" rain                  %u\n\r", packet->rain);
 	logd(" battery_low:          %u\n\r", packet->battery_low);
 	logd(" wind_direction:       %u\n\r", packet->wind_direction);
+	logd("\n\r");
+}
+
+static void rfm210_print_packet_sensor(RFM210PacketSensor *packet, uint8_t id) {
+	logd("RFM210 sensor packet (%d):\n\r", id);
+	logd(" temperature:          %u\n\r", packet->temperature);
+	logd(" humidity:             %u\n\r", packet->humidity);
 	logd("\n\r");
 }
 
@@ -107,29 +114,54 @@ static uint32_t rfm210_get_next_timestamp_index(RFM210 *rfm210, uint32_t index) 
 
 #define NIBBLE_LOW(value) ((value >> 4) & 0xF)
 #define NIBBLE_HIGH(value) (value & 0xF)
-static void rfm210_check_data(RFM210 *rfm210) {
-	logd("data: "); log_array_u8(rfm210->data, 11, true);
-	logd("crc: %d\n\r", rfm210_crc8(&rfm210->data[1], 9));
+static void rfm210_check_data_station(RFM210 *rfm210) {
+//	logd("data ws: "); log_array_u8(rfm210->data, 11, true);
+//	logd("crc: %d\n\r", rfm210_crc8(&rfm210->data[1], 9));
+
 	// Check preamble, family code and CRC
 	if((rfm210->data[0] != 0xFF) ||
-	   ((rfm210->data[1] >> 4) != RFM210_WEATHER_STATION_FAMILY_CODE) ||
+	   ((rfm210->data[1] >> 4) != RFM210_STATION_FAMILY_CODE) ||
 	   (rfm210_crc8(&rfm210->data[1], 9) != rfm210->data[10])) {
 		return;
 	}
 
 	const uint8_t id = (NIBBLE_HIGH(rfm210->data[1]) << 4) | NIBBLE_LOW(rfm210->data[2]);
 
-	memcpy(&rfm210->payload[id][0], &rfm210->data[2], 8);
-	rfm210->payload_last_change[id] = system_timer_get_ms();
+	memcpy(&rfm210->payload_station[id][0], &rfm210->data[2], 8);
+	rfm210->payload_station_last_change[id] = system_timer_get_ms();
 
 	// Testing
-	RFM210Packet packet;
-	rfm210_fill_packet(rfm210, id, &packet);
-	rfm210_print_packet(&packet, id);
+	RFM210PacketStation packet;
+	rfm210_fill_packet_station(rfm210, id, &packet);
+	rfm210_print_packet_station(&packet, id);
 }
 
-void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet) {
-	uint8_t *data = &rfm210->payload[id][0];
+static bool rfm210_check_data_sensor(RFM210 *rfm210) {
+//	logd("data ht: "); log_array_u8(rfm210->data, 7, true);
+//	logd("crc: %d\n\r", rfm210_crc8(&rfm210->data[1], 4));
+
+	// Check preamble, family code and CRC
+	if((rfm210->data[0] != 0xFF) ||
+	   ((rfm210->data[1] >> 4) != RFM210_SENSOR_FAMILY_CODE) ||
+	   (rfm210_crc8(&rfm210->data[1], 4) != rfm210->data[5])) {
+		return false;
+	}
+
+	const uint8_t id = (NIBBLE_HIGH(rfm210->data[1]) << 4) | NIBBLE_LOW(rfm210->data[2]);
+
+	memcpy(&rfm210->payload_sensor[id][0], &rfm210->data[2], 3);
+	rfm210->payload_sensor_last_change[id] = system_timer_get_ms();
+
+	// Testing
+	RFM210PacketSensor packet;
+	rfm210_fill_packet_sensor(rfm210, id, &packet);
+	rfm210_print_packet_sensor(&packet, id);
+
+	return true;
+}
+
+void rfm210_fill_packet_station(RFM210 *rfm210, const uint16_t id, RFM210PacketStation *packet) {
+	uint8_t *data = &rfm210->payload_station[id][0];
 
 	packet->temperature       = ((NIBBLE_HIGH(data[0]) & 0x3) << 8) | (NIBBLE_LOW(data[1])  << 4) |  NIBBLE_HIGH(data[1]);
 	packet->humidity          = (NIBBLE_LOW(data[2]) << 4)          |  NIBBLE_HIGH(data[2]);
@@ -155,6 +187,17 @@ void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet)
 	packet->wind_speed  = packet->wind_speed*340/100; // m/10s
 	packet->gust_speed  = packet->gust_speed*340/100; // m/10s
 	packet->rain        = packet->rain*30/10;         // mm/10
+}
+
+void rfm210_fill_packet_sensor(RFM210 *rfm210, const uint16_t id, RFM210PacketSensor *packet) {
+	uint8_t *data = &rfm210->payload_sensor[id][0];
+
+	packet->temperature     = ((NIBBLE_HIGH(data[0]) & 0x3) << 8) | (NIBBLE_LOW(data[1])  << 4) |  NIBBLE_HIGH(data[1]);
+	packet->humidity        = (NIBBLE_LOW(data[2]) << 4)          |  NIBBLE_HIGH(data[2]);
+
+	if(NIBBLE_HIGH(data[0]) & (1 << 3)) {
+		packet->temperature = -packet->temperature;
+	}
 }
 
 void rfm210_init(RFM210 *rfm210) {
@@ -280,7 +323,7 @@ void rfm210_tick(RFM210 *rfm210) {
 
 		if((time_diff2 < RFM210_OOK_OFF-RFM210_TIME_DELTA) ||
 		   (time_diff2 > RFM210_OOK_OFF+RFM210_TIME_DELTA)) {
-			if((rfm210->data_bit != 7) || (rfm210->data_index != 10)) {
+			if((rfm210->data_bit != 7) || ((rfm210->data_index != 6) && (rfm210->data_index != 10))) {
 				rfm210->timestamp_start = nextnext;
 				rfm210_reset(rfm210);
 				continue;
@@ -301,16 +344,24 @@ void rfm210_tick(RFM210 *rfm210) {
 		}
 
 		if(rfm210->data_bit >= 8) {
-			XMC_GPIO_SetOutputHigh(P0_1);
 			rfm210->data_index++;
 			rfm210->data_bit = 0;
+
+			// Check for sensor data
+			if((rfm210->data_bit == 0) && (rfm210->data_index == 7)) {
+				// Only reset if sensor data is found, otherwise this might be station data
+				if(rfm210_check_data_sensor(rfm210)) {
+					rfm210_reset(rfm210);
+				}
+			}
+
+			// Check for station data
 			if(rfm210->data_index >= 11) {
-				rfm210_check_data(rfm210);
+				rfm210_check_data_station(rfm210);
 				rfm210_reset(rfm210);
 			}
 		}
 
 		rfm210->timestamp_start = nextnext;
 	}
-	XMC_GPIO_SetOutputLow(P0_1);
 }

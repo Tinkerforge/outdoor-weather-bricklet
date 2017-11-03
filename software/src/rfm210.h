@@ -25,10 +25,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define RFM210_WEATHER_STATION_FAMILY_CODE 0b1010
+#define RFM210_STATION_FAMILY_CODE 0b1010
+#define RFM210_SENSOR_FAMILY_CODE 0b0100
 #define RFM210_MAX_DEVICES 256
 #define RFM210_DATA_SIZE 11
-#define RFM210_DATA_PAYLOAD_SIZE 8
+#define RFM210_DATA_PAYLOAD_STATION_SIZE 8
+#define RFM210_DATA_PAYLOAD_SENSOR_SIZE 3
 #define RFM210_TIMESTAMP_SIZE 2048
 #define RFM210_TIMESTAMP_MASK (RFM210_TIMESTAMP_SIZE-1) // Note: Always use power of 2 here
 
@@ -40,7 +42,12 @@ typedef struct {
 	uint32_t rain;
 	bool battery_low;
 	uint8_t wind_direction;
-} RFM210Packet;
+} RFM210PacketStation;
+
+typedef struct {
+	int16_t temperature;
+	uint8_t humidity;
+} RFM210PacketSensor;
 
 typedef struct {
 	uint16_t timestamps[RFM210_TIMESTAMP_SIZE];
@@ -51,18 +58,26 @@ typedef struct {
 	uint32_t data_index;
 	uint32_t data_bit;
 
-	uint8_t payload[RFM210_MAX_DEVICES][RFM210_DATA_PAYLOAD_SIZE];
-	uint32_t payload_last_change[RFM210_MAX_DEVICES];
+	uint8_t payload_station[RFM210_MAX_DEVICES][RFM210_DATA_PAYLOAD_STATION_SIZE];
+	uint32_t payload_station_last_change[RFM210_MAX_DEVICES];
 
-	RFM210Packet packet;
+	uint8_t payload_sensor[RFM210_MAX_DEVICES][RFM210_DATA_PAYLOAD_SENSOR_SIZE];
+	uint32_t payload_sensor_last_change[RFM210_MAX_DEVICES];
 
-	uint16_t current_id_index;
-	uint16_t current_chunk_offset;
+	RFM210PacketStation packet_station;
+	RFM210PacketSensor packet_sensor;
 
-	bool callback_enabled;
+	uint16_t current_id_index_station;
+	uint16_t current_chunk_offset_station;
+	uint16_t current_id_index_sensor;
+	uint16_t current_chunk_offset_sensor;
+
+	bool callback_enabled_station;
+	bool callback_enabled_sensor;
 } RFM210;
 
-void rfm210_fill_packet(RFM210 *rfm210, const uint16_t id, RFM210Packet *packet);
+void rfm210_fill_packet_station(RFM210 *rfm210, const uint16_t id, RFM210PacketStation *packet);
+void rfm210_fill_packet_sensor(RFM210 *rfm210, const uint16_t id, RFM210PacketSensor *packet);
 void rfm210_init(RFM210 *rfm210);
 void rfm210_tick(RFM210 *rfm210);
 
