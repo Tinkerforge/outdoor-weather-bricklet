@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <head>
+        <title>Tinkerforge | JavaScript Example</title>
+    </head>
+    <body>
+        <div style="text-align:center;">
+            <h1>Outdoor Weather Bricklet Callback Example</h1>
+            <p>
+                <input value="localhost" id="host" type="text" size="20">:
+                <input value="4280" id="port" type="text" size="5">,
+                <input value="uid" id="uid" type="text" size="5">
+                <input value="Start Example" id="start" type="button" onclick="startExample();">
+            </p>
+            <p>
+                <textarea readonly id="text" cols="80" rows="24" style="resize:none;"
+                          >Press "Start Example" to begin ...</textarea>
+            </p>
+        <div>
+        <script src="./Tinkerforge.js" type='text/javascript'></script>
+        <script type='text/javascript'>
+            var ipcon;
+            var textArea = document.getElementById("text");
+            function startExample() {
+                textArea.value = "";
+                var HOST = document.getElementById("host").value;
+                var PORT = parseInt(document.getElementById("port").value);
+                var UID = document.getElementById("uid").value;
+                if(ipcon !== undefined) {
+                    ipcon.disconnect();
+                }
+                ipcon = new Tinkerforge.IPConnection(); // Create IP connection
+                var ow = new Tinkerforge.BrickletOutdoorWeather(UID, ipcon); // Create device object
+                ipcon.connect(HOST, PORT,
+                    function(error) {
+                        textArea.value += 'Error: ' + error + '\n';
+                    }
+                ); // Connect to brickd
+                // Don't use device before ipcon is connected
+
+                ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
+                    function (connectReason) {
+                        // Enable sensor data callbacks
+                        ow.setSensorCallbackConfiguration(true);
+
+                        // Enable station data callbacks
+                        ow.setStationCallbackConfiguration(true);
+                    }
+                );
+
+                // Register sensor data callback
+                ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_SENSOR_DATA,
+                    // Callback function for sensor data callback
+                    function (identifier, temperature, humidity) {
+                        textArea.value += 'Identifier (Sensor): ' + identifier + '\n';
+                        textArea.value += 'Temperature (Sensor): ' + temperature/10.0 + ' °C\n';
+                        textArea.value += 'Humidity (Sensor): ' + humidity + ' %RH\n';
+                        textArea.value += '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+
+                // Register station data callback
+                ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_STATION_DATA,
+                    // Callback function for station data callback
+                    function (identifier, temperature, humidity, windSpeed, gustSpeed, rain,
+                              windDirection, batteryLow) {
+                        textArea.value += 'Identifier (Station): ' + identifier + '\n';
+                        textArea.value += 'Temperature (Station): ' + temperature/10.0 + ' °C\n';
+                        textArea.value += 'Humidity (Station): ' + humidity + ' %RH\n';
+                        textArea.value += 'Wind Speed (Station): ' + windSpeed/10.0 + ' m/s\n';
+                        textArea.value += 'Gust Speed (Station): ' + gustSpeed/10.0 + ' m/s\n';
+                        textArea.value += 'Rain (Station): ' + rain/10.0 + ' mm\n';
+                        textArea.value += 'Wind Direction (Station): ' + windDirection + '\n';
+                        textArea.value += 'Battery Low (Station): ' + batteryLow + '\n';
+                        textArea.value += '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+            }
+        </script>
+    </body>
+</html>
