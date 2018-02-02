@@ -41,23 +41,11 @@
 
                 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
                     function (connectReason) {
-                        // Enable sensor data callbacks
-                        ow.setSensorCallbackConfiguration(true);
-
                         // Enable station data callbacks
                         ow.setStationCallbackConfiguration(true);
-                    }
-                );
 
-                // Register sensor data callback
-                ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_SENSOR_DATA,
-                    // Callback function for sensor data callback
-                    function (identifier, temperature, humidity) {
-                        textArea.value += 'Identifier (Sensor): ' + identifier + '\n';
-                        textArea.value += 'Temperature (Sensor): ' + temperature/10.0 + ' °C\n';
-                        textArea.value += 'Humidity (Sensor): ' + humidity + ' %RH\n';
-                        textArea.value += '\n';
-                        textArea.scrollTop = textArea.scrollHeight;
+                        // Enable sensor data callbacks
+                        ow.setSensorCallbackConfiguration(true);
                     }
                 );
 
@@ -74,6 +62,18 @@
                         textArea.value += 'Rain (Station): ' + rain/10.0 + ' mm\n';
                         textArea.value += 'Wind Direction (Station): ' + windDirection + '\n';
                         textArea.value += 'Battery Low (Station): ' + batteryLow + '\n';
+                        textArea.value += '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+
+                // Register sensor data callback
+                ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_SENSOR_DATA,
+                    // Callback function for sensor data callback
+                    function (identifier, temperature, humidity) {
+                        textArea.value += 'Identifier (Sensor): ' + identifier + '\n';
+                        textArea.value += 'Temperature (Sensor): ' + temperature/10.0 + ' °C\n';
+                        textArea.value += 'Humidity (Sensor): ' + humidity + ' %RH\n';
                         textArea.value += '\n';
                         textArea.scrollTop = textArea.scrollHeight;
                     }

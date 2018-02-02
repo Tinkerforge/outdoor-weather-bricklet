@@ -16,22 +16,11 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function (connectReason) {
-        // Enable sensor data callbacks
-        ow.setSensorCallbackConfiguration(true);
-
         // Enable station data callbacks
         ow.setStationCallbackConfiguration(true);
-    }
-);
 
-// Register sensor data callback
-ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_SENSOR_DATA,
-    // Callback function for sensor data callback
-    function (identifier, temperature, humidity) {
-        console.log('Identifier (Sensor): ' + identifier);
-        console.log('Temperature (Sensor): ' + temperature/10.0 + ' °C');
-        console.log('Humidity (Sensor): ' + humidity + ' %RH');
-        console.log();
+        // Enable sensor data callbacks
+        ow.setSensorCallbackConfiguration(true);
     }
 );
 
@@ -48,6 +37,17 @@ ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_STATION_DATA,
         console.log('Rain (Station): ' + rain/10.0 + ' mm');
         console.log('Wind Direction (Station): ' + windDirection);
         console.log('Battery Low (Station): ' + batteryLow);
+        console.log();
+    }
+);
+
+// Register sensor data callback
+ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_SENSOR_DATA,
+    // Callback function for sensor data callback
+    function (identifier, temperature, humidity) {
+        console.log('Identifier (Sensor): ' + identifier);
+        console.log('Temperature (Sensor): ' + temperature/10.0 + ' °C');
+        console.log('Humidity (Sensor): ' + humidity + ' %RH');
         console.log();
     }
 );

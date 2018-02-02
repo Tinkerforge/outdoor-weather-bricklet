@@ -12,28 +12,20 @@ function matlab_example_callback()
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
-    % Enable sensor data callbacks
-    ow.setSensorCallbackConfiguration(true);
-
     % Enable station data callbacks
     ow.setStationCallbackConfiguration(true);
 
-    % Register sensor data callback to function cb_sensor_data
-    set(ow, 'SensorDataCallback', @(h, e) cb_sensor_data(e));
+    % Enable sensor data callbacks
+    ow.setSensorCallbackConfiguration(true);
 
     % Register station data callback to function cb_station_data
     set(ow, 'StationDataCallback', @(h, e) cb_station_data(e));
 
+    % Register sensor data callback to function cb_sensor_data
+    set(ow, 'SensorDataCallback', @(h, e) cb_sensor_data(e));
+
     input('Press key to exit\n', 's');
     ipcon.disconnect();
-end
-
-% Callback function for sensor data callback
-function cb_sensor_data(e)
-    fprintf('Identifier (Sensor): %i\n', e.identifier);
-    fprintf('Temperature (Sensor): %g °C\n', e.temperature/10.0);
-    fprintf('Humidity (Sensor): %i %%RH\n', e.humidity);
-    fprintf('\n');
 end
 
 % Callback function for station data callback
@@ -46,5 +38,13 @@ function cb_station_data(e)
     fprintf('Rain (Station): %g mm\n', e.rain/10.0);
     fprintf('Wind Direction (Station): %i\n', e.windDirection);
     fprintf('Battery Low (Station): %i\n', e.batteryLow);
+    fprintf('\n');
+end
+
+% Callback function for sensor data callback
+function cb_sensor_data(e)
+    fprintf('Identifier (Sensor): %i\n', e.identifier);
+    fprintf('Temperature (Sensor): %g °C\n', e.temperature/10.0);
+    fprintf('Humidity (Sensor): %i %%RH\n', e.humidity);
     fprintf('\n');
 end

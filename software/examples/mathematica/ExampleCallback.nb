@@ -18,19 +18,12 @@ Notebook[{
    RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Enable sensor data callbacks", "*)"}],
-   RowBox[{"ow", "@", RowBox[{"SetSensorCallbackConfiguration", "[", "True", "]"}]}],
-   RowBox[{"
-"}],
    RowBox[{"(*", "Enable station data callbacks", "*)"}],
    RowBox[{"ow", "@", RowBox[{"SetStationCallbackConfiguration", "[", "True", "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for sensor data callback", "*)"}],
-   RowBox[{RowBox[{"SensorDataCB", "[", RowBox[{"sender_", ",", "identifier_", ",", "temperature_", ",", "humidity_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Identifier (Sensor): \>\"", "<>", RowBox[{"ToString", "[", "identifier", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Temperature (Sensor): \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"N", "[", RowBox[{"Quantity", "[", RowBox[{"temperature", ",", "\"\<\.b0C/10\>\""}], "]"}], "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Humidity (Sensor): \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"N", "[", RowBox[{"Quantity", "[", RowBox[{"humidity", ",", "\"\<%RH\>\""}], "]"}], "]"}], "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
-   RowBox[{"
-"}],
-   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"ow", "@", "SensorDataCallback"}], ",", "SensorDataCB"}], "]"}],
+   RowBox[{"(*", "Enable sensor data callbacks", "*)"}],
+   RowBox[{"ow", "@", RowBox[{"SetSensorCallbackConfiguration", "[", "True", "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"(*", "Callback function for station data callback", "*)"}],
@@ -38,6 +31,13 @@ Notebook[{
    RowBox[{"
 "}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"ow", "@", "StationDataCallback"}], ",", "StationDataCB"}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Callback function for sensor data callback", "*)"}],
+   RowBox[{RowBox[{"SensorDataCB", "[", RowBox[{"sender_", ",", "identifier_", ",", "temperature_", ",", "humidity_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Identifier (Sensor): \>\"", "<>", RowBox[{"ToString", "[", "identifier", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Temperature (Sensor): \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"N", "[", RowBox[{"Quantity", "[", RowBox[{"temperature", ",", "\"\<\.b0C/10\>\""}], "]"}], "]"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Humidity (Sensor): \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"N", "[", RowBox[{"Quantity", "[", RowBox[{"humidity", ",", "\"\<%RH\>\""}], "]"}], "]"}], "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"ow", "@", "SensorDataCallback"}], ",", "SensorDataCB"}], "]"}],
    RowBox[{"
 "}],
    RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}],

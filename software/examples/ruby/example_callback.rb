@@ -16,21 +16,11 @@ ow = BrickletOutdoorWeather.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Enable sensor data callbacks
-ow.set_sensor_callback_configuration true
-
 # Enable station data callbacks
 ow.set_station_callback_configuration true
 
-# Register sensor data callback
-ow.register_callback(BrickletOutdoorWeather::CALLBACK_SENSOR_DATA) do |identifier,
-                                                                       temperature,
-                                                                       humidity|
-  puts "Identifier (Sensor): #{identifier}"
-  puts "Temperature (Sensor): #{temperature/10.0} °C"
-  puts "Humidity (Sensor): #{humidity} %RH"
-  puts ''
-end
+# Enable sensor data callbacks
+ow.set_sensor_callback_configuration true
 
 # Register station data callback
 ow.register_callback(BrickletOutdoorWeather::CALLBACK_STATION_DATA) do |identifier,
@@ -48,6 +38,16 @@ ow.register_callback(BrickletOutdoorWeather::CALLBACK_STATION_DATA) do |identifi
   puts "Rain (Station): #{rain/10.0} mm"
   puts "Wind Direction (Station): #{wind_direction}"
   puts "Battery Low (Station): #{battery_low}"
+  puts ''
+end
+
+# Register sensor data callback
+ow.register_callback(BrickletOutdoorWeather::CALLBACK_SENSOR_DATA) do |identifier,
+                                                                       temperature,
+                                                                       humidity|
+  puts "Identifier (Sensor): #{identifier}"
+  puts "Temperature (Sensor): #{temperature/10.0} °C"
+  puts "Humidity (Sensor): #{humidity} %RH"
   puts ''
 end
 

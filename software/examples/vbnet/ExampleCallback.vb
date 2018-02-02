@@ -6,15 +6,6 @@ Module ExampleCallback
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change XYZ to the UID of your Outdoor Weather Bricklet
 
-    ' Callback subroutine for sensor data callback
-    Sub SensorDataCB(ByVal sender As BrickletOutdoorWeather, ByVal identifier As Byte, _
-                     ByVal temperature As Short, ByVal humidity As Byte)
-        Console.WriteLine("Identifier (Sensor): " + identifier.ToString())
-        Console.WriteLine("Temperature (Sensor): " + (temperature/10.0).ToString() + " °C")
-        Console.WriteLine("Humidity (Sensor): " + humidity.ToString() + " %RH")
-        Console.WriteLine("")
-    End Sub
-
     ' Callback subroutine for station data callback
     Sub StationDataCB(ByVal sender As BrickletOutdoorWeather, ByVal identifier As Byte, _
                       ByVal temperature As Short, ByVal humidity As Byte, _
@@ -32,6 +23,15 @@ Module ExampleCallback
         Console.WriteLine("")
     End Sub
 
+    ' Callback subroutine for sensor data callback
+    Sub SensorDataCB(ByVal sender As BrickletOutdoorWeather, ByVal identifier As Byte, _
+                     ByVal temperature As Short, ByVal humidity As Byte)
+        Console.WriteLine("Identifier (Sensor): " + identifier.ToString())
+        Console.WriteLine("Temperature (Sensor): " + (temperature/10.0).ToString() + " °C")
+        Console.WriteLine("Humidity (Sensor): " + humidity.ToString() + " %RH")
+        Console.WriteLine("")
+    End Sub
+
     Sub Main()
         Dim ipcon As New IPConnection() ' Create IP connection
         Dim ow As New BrickletOutdoorWeather(UID, ipcon) ' Create device object
@@ -39,17 +39,17 @@ Module ExampleCallback
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Enable sensor data callbacks
-        ow.SetSensorCallbackConfiguration(True)
-
         ' Enable station data callbacks
         ow.SetStationCallbackConfiguration(True)
 
-        ' Register sensor data callback to subroutine SensorDataCB
-        AddHandler ow.SensorDataCallback, AddressOf SensorDataCB
+        ' Enable sensor data callbacks
+        ow.SetSensorCallbackConfiguration(True)
 
         ' Register station data callback to subroutine StationDataCB
         AddHandler ow.StationDataCallback, AddressOf StationDataCB
+
+        ' Register sensor data callback to subroutine SensorDataCB
+        AddHandler ow.SensorDataCallback, AddressOf SensorDataCB
 
         Console.WriteLine("Press key to exit")
         Console.ReadLine()

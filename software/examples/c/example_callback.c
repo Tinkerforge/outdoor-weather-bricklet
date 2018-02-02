@@ -7,17 +7,6 @@
 #define PORT 4223
 #define UID "XYZ" // Change XYZ to the UID of your Outdoor Weather Bricklet
 
-// Callback function for sensor data callback
-void cb_sensor_data(uint8_t identifier, int16_t temperature, uint8_t humidity,
-                    void *user_data) {
-	(void)user_data; // avoid unused parameter warning
-
-	printf("Identifier (Sensor): %u\n", identifier);
-	printf("Temperature (Sensor): %f °C\n", temperature/10.0);
-	printf("Humidity (Sensor): %u %%RH\n", humidity);
-	printf("\n");
-}
-
 // Callback function for station data callback
 void cb_station_data(uint8_t identifier, int16_t temperature, uint8_t humidity,
                      uint32_t wind_speed, uint32_t gust_speed, uint32_t rain,
@@ -32,6 +21,17 @@ void cb_station_data(uint8_t identifier, int16_t temperature, uint8_t humidity,
 	printf("Rain (Station): %f mm\n", rain/10.0);
 	printf("Wind Direction (Station): %u\n", wind_direction);
 	printf("Battery Low (Station): %s\n", battery_low ? "true" : "false");
+	printf("\n");
+}
+
+// Callback function for sensor data callback
+void cb_sensor_data(uint8_t identifier, int16_t temperature, uint8_t humidity,
+                    void *user_data) {
+	(void)user_data; // avoid unused parameter warning
+
+	printf("Identifier (Sensor): %u\n", identifier);
+	printf("Temperature (Sensor): %f °C\n", temperature/10.0);
+	printf("Humidity (Sensor): %u %%RH\n", humidity);
 	printf("\n");
 }
 
@@ -51,22 +51,22 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// Enable sensor data callbacks
-	outdoor_weather_set_sensor_callback_configuration(&ow, true);
-
 	// Enable station data callbacks
 	outdoor_weather_set_station_callback_configuration(&ow, true);
 
-	// Register sensor data callback to function cb_sensor_data
-	outdoor_weather_register_callback(&ow,
-	                                  OUTDOOR_WEATHER_CALLBACK_SENSOR_DATA,
-	                                  (void *)cb_sensor_data,
-	                                  NULL);
+	// Enable sensor data callbacks
+	outdoor_weather_set_sensor_callback_configuration(&ow, true);
 
 	// Register station data callback to function cb_station_data
 	outdoor_weather_register_callback(&ow,
 	                                  OUTDOOR_WEATHER_CALLBACK_STATION_DATA,
 	                                  (void *)cb_station_data,
+	                                  NULL);
+
+	// Register sensor data callback to function cb_sensor_data
+	outdoor_weather_register_callback(&ow,
+	                                  OUTDOOR_WEATHER_CALLBACK_SENSOR_DATA,
+	                                  (void *)cb_sensor_data,
 	                                  NULL);
 
 	printf("Press key to exit\n");

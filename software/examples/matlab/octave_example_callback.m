@@ -11,28 +11,20 @@ function octave_example_callback()
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
-    % Enable sensor data callbacks
-    ow.setSensorCallbackConfiguration(true);
-
     % Enable station data callbacks
     ow.setStationCallbackConfiguration(true);
 
-    % Register sensor data callback to function cb_sensor_data
-    ow.addSensorDataCallback(@cb_sensor_data);
+    % Enable sensor data callbacks
+    ow.setSensorCallbackConfiguration(true);
 
     % Register station data callback to function cb_station_data
     ow.addStationDataCallback(@cb_station_data);
 
+    % Register sensor data callback to function cb_sensor_data
+    ow.addSensorDataCallback(@cb_sensor_data);
+
     input("Press key to exit\n", "s");
     ipcon.disconnect();
-end
-
-% Callback function for sensor data callback
-function cb_sensor_data(e)
-    fprintf("Identifier (Sensor): %d\n", e.identifier);
-    fprintf("Temperature (Sensor): %g °C\n", e.temperature/10.0);
-    fprintf("Humidity (Sensor): %d %%RH\n", e.humidity);
-    fprintf("\n");
 end
 
 % Callback function for station data callback
@@ -45,6 +37,14 @@ function cb_station_data(e)
     fprintf("Rain (Station): %g mm\n", java2int(e.rain)/10.0);
     fprintf("Wind Direction (Station): %d\n", e.windDirection);
     fprintf("Battery Low (Station): %d\n", e.batteryLow);
+    fprintf("\n");
+end
+
+% Callback function for sensor data callback
+function cb_sensor_data(e)
+    fprintf("Identifier (Sensor): %d\n", e.identifier);
+    fprintf("Temperature (Sensor): %g °C\n", e.temperature/10.0);
+    fprintf("Humidity (Sensor): %d %%RH\n", e.humidity);
     fprintf("\n");
 end
 

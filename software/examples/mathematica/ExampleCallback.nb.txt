@@ -10,21 +10,11 @@ ipcon=NETNew["Tinkerforge.IPConnection"]
 ow=NETNew["Tinkerforge.BrickletOutdoorWeather",uid,ipcon]
 ipcon@Connect[host,port]
 
-(*Enable sensor data callbacks*)
-ow@SetSensorCallbackConfiguration[True]
-
 (*Enable station data callbacks*)
 ow@SetStationCallbackConfiguration[True]
 
-(*Callback function for sensor data callback*)
-SensorDataCB[sender_,identifier_,temperature_,humidity_]:=
- Module[{},
-  Print["Identifier (Sensor): "<>ToString[identifier]];
-  Print["Temperature (Sensor): "<>ToString[N[Quantity[temperature,"°C/10"]]]];
-  Print["Humidity (Sensor): "<>ToString[N[Quantity[humidity,"%RH"]]]]
- ]
-
-AddEventHandler[ow@SensorDataCallback,SensorDataCB]
+(*Enable sensor data callbacks*)
+ow@SetSensorCallbackConfiguration[True]
 
 (*Callback function for station data callback*)
 StationDataCB[sender_,identifier_,temperature_,humidity_,windSpeed_,gustSpeed_,rain_,
@@ -41,6 +31,16 @@ StationDataCB[sender_,identifier_,temperature_,humidity_,windSpeed_,gustSpeed_,r
  ]
 
 AddEventHandler[ow@StationDataCallback,StationDataCB]
+
+(*Callback function for sensor data callback*)
+SensorDataCB[sender_,identifier_,temperature_,humidity_]:=
+ Module[{},
+  Print["Identifier (Sensor): "<>ToString[identifier]];
+  Print["Temperature (Sensor): "<>ToString[N[Quantity[temperature,"°C/10"]]]];
+  Print["Humidity (Sensor): "<>ToString[N[Quantity[humidity,"%RH"]]]]
+ ]
+
+AddEventHandler[ow@SensorDataCallback,SensorDataCB]
 
 Input["Click OK to exit"]
 

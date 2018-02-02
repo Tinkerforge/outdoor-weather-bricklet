@@ -12,13 +12,13 @@ type
     ipcon: TIPConnection;
     ow: TBrickletOutdoorWeather;
   public
-    procedure SensorDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
-                           const temperature: smallint; const humidity: byte);
     procedure StationDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
                             const temperature: smallint; const humidity: byte;
                             const windSpeed: longword; const gustSpeed: longword;
                             const rain: longword; const windDirection: byte;
                             const batteryLow: boolean);
+    procedure SensorDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
+                           const temperature: smallint; const humidity: byte);
     procedure Execute;
   end;
 
@@ -29,16 +29,6 @@ const
 
 var
   e: TExample;
-
-{ Callback procedure for sensor data callback }
-procedure TExample.SensorDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
-                                const temperature: smallint; const humidity: byte);
-begin
-  WriteLn(Format('Identifier (Sensor): %d', [identifier]));
-  WriteLn(Format('Temperature (Sensor): %f °C', [temperature/10.0]));
-  WriteLn(Format('Humidity (Sensor): %d %%RH', [humidity]));
-  WriteLn('');
-end;
 
 { Callback procedure for station data callback }
 procedure TExample.StationDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
@@ -58,6 +48,16 @@ begin
   WriteLn('');
 end;
 
+{ Callback procedure for sensor data callback }
+procedure TExample.SensorDataCB(sender: TBrickletOutdoorWeather; const identifier: byte;
+                                const temperature: smallint; const humidity: byte);
+begin
+  WriteLn(Format('Identifier (Sensor): %d', [identifier]));
+  WriteLn(Format('Temperature (Sensor): %f °C', [temperature/10.0]));
+  WriteLn(Format('Humidity (Sensor): %d %%RH', [humidity]));
+  WriteLn('');
+end;
+
 procedure TExample.Execute;
 begin
   { Create IP connection }
@@ -70,17 +70,17 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Enable sensor data callbacks }
-  ow.SetSensorCallbackConfiguration(true);
-
   { Enable station data callbacks }
   ow.SetStationCallbackConfiguration(true);
 
-  { Register sensor data callback to procedure SensorDataCB }
-  ow.OnSensorData := {$ifdef FPC}@{$endif}SensorDataCB;
+  { Enable sensor data callbacks }
+  ow.SetSensorCallbackConfiguration(true);
 
   { Register station data callback to procedure StationDataCB }
   ow.OnStationData := {$ifdef FPC}@{$endif}StationDataCB;
+
+  { Register sensor data callback to procedure SensorDataCB }
+  ow.OnSensorData := {$ifdef FPC}@{$endif}SensorDataCB;
 
   WriteLn('Press key to exit');
   ReadLn;

@@ -17,21 +17,11 @@ public class ExampleCallback {
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Enable sensor data callbacks
-		ow.setSensorCallbackConfiguration(true);
-
 		// Enable station data callbacks
 		ow.setStationCallbackConfiguration(true);
 
-		// Add sensor data listener
-		ow.addSensorDataListener(new BrickletOutdoorWeather.SensorDataListener() {
-			public void sensorData(int identifier, int temperature, int humidity) {
-				System.out.println("Identifier (Sensor): " + identifier);
-				System.out.println("Temperature (Sensor): " + temperature/10.0 + " °C");
-				System.out.println("Humidity (Sensor): " + humidity + " %RH");
-				System.out.println("");
-			}
-		});
+		// Enable sensor data callbacks
+		ow.setSensorCallbackConfiguration(true);
 
 		// Add station data listener
 		ow.addStationDataListener(new BrickletOutdoorWeather.StationDataListener() {
@@ -46,6 +36,16 @@ public class ExampleCallback {
 				System.out.println("Rain (Station): " + rain/10.0 + " mm");
 				System.out.println("Wind Direction (Station): " + windDirection);
 				System.out.println("Battery Low (Station): " + batteryLow);
+				System.out.println("");
+			}
+		});
+
+		// Add sensor data listener
+		ow.addSensorDataListener(new BrickletOutdoorWeather.SensorDataListener() {
+			public void sensorData(int identifier, int temperature, int humidity) {
+				System.out.println("Identifier (Sensor): " + identifier);
+				System.out.println("Temperature (Sensor): " + temperature/10.0 + " °C");
+				System.out.println("Humidity (Sensor): " + humidity + " %RH");
 				System.out.println("");
 			}
 		});
