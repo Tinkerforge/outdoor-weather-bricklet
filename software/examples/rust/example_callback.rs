@@ -18,10 +18,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Enable sensor data callbacks
     ow.set_sensor_callback_configuration(true);
 
-    // Create receiver for station data events.
-    let station_data_receiver = ow.get_station_data_receiver();
+    let station_data_receiver = ow.get_station_data_callback_receiver();
 
-    // Spawn thread to handle received events. This thread ends when the `ow` object
+    // Spawn thread to handle received callback messages.
+    // This thread ends when the `ow` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for station_data in station_data_receiver {
@@ -37,10 +37,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    // Create receiver for sensor data events.
-    let sensor_data_receiver = ow.get_sensor_data_receiver();
+    let sensor_data_receiver = ow.get_sensor_data_callback_receiver();
 
-    // Spawn thread to handle received events. This thread ends when the `ow` object
+    // Spawn thread to handle received callback messages.
+    // This thread ends when the `ow` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for sensor_data in sensor_data_receiver {
