@@ -26,11 +26,11 @@ func main() {
 
 	ow.RegisterStationDataCallback(func(identifier uint8, temperature int16, humidity uint8, windSpeed uint32, gustSpeed uint32, rain uint32, windDirection outdoor_weather_bricklet.WindDirection, batteryLow bool) {
 		fmt.Printf("Identifier (Station): %d\n", identifier)
-		fmt.Printf("Temperature (Station): %d °C\n", float64(temperature)/10.0)
+		fmt.Printf("Temperature (Station): %f °C\n", float64(temperature)/10.0)
 		fmt.Printf("Humidity (Station): %d %RH\n", humidity)
-		fmt.Printf("Wind Speed (Station): %d m/s\n", float64(windSpeed)/10.0)
-		fmt.Printf("Gust Speed (Station): %d m/s\n", float64(gustSpeed)/10.0)
-		fmt.Printf("Rain (Station): %d mm\n", float64(rain)/10.0)
+		fmt.Printf("Wind Speed (Station): %f m/s\n", float64(windSpeed)/10.0)
+		fmt.Printf("Gust Speed (Station): %f m/s\n", float64(gustSpeed)/10.0)
+		fmt.Printf("Rain (Station): %f mm\n", float64(rain)/10.0)
 
 		if windDirection == outdoor_weather_bricklet.WindDirectionN {
 			fmt.Println("Wind Direction (Station): N")
@@ -74,7 +74,7 @@ func main() {
 
 	ow.RegisterSensorDataCallback(func(identifier uint8, temperature int16, humidity uint8) {
 		fmt.Printf("Identifier (Sensor): %d\n", identifier)
-		fmt.Printf("Temperature (Sensor): %d °C\n", float64(temperature)/10.0)
+		fmt.Printf("Temperature (Sensor): %f °C\n", float64(temperature)/10.0)
 		fmt.Printf("Humidity (Sensor): %d %RH\n", humidity)
 		fmt.Println()
 	})
