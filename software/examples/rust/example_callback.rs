@@ -26,10 +26,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     thread::spawn(move || {
         for station_data in station_data_receiver {
             println!("Identifier (Station): {}", station_data.identifier);
-            println!("Temperature (Station): {} °C", station_data.temperature as f32 / 10.0);
+            println!(
+                "Temperature (Station): {} °C",
+                station_data.temperature as f32 / 10.0
+            );
             println!("Humidity (Station): {} %RH", station_data.humidity);
-            println!("Wind Speed (Station): {} m/s", station_data.wind_speed as f32 / 10.0);
-            println!("Gust Speed (Station): {} m/s", station_data.gust_speed as f32 / 10.0);
+            println!(
+                "Wind Speed (Station): {} m/s",
+                station_data.wind_speed as f32 / 10.0
+            );
+            println!(
+                "Gust Speed (Station): {} m/s",
+                station_data.gust_speed as f32 / 10.0
+            );
             println!("Rain (Station): {} mm", station_data.rain as f32 / 10.0);
 
             if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_N {
@@ -81,7 +90,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     thread::spawn(move || {
         for sensor_data in sensor_data_receiver {
             println!("Identifier (Sensor): {}", sensor_data.identifier);
-            println!("Temperature (Sensor): {} °C", sensor_data.temperature as f32 / 10.0);
+            println!(
+                "Temperature (Sensor): {} °C",
+                sensor_data.temperature as f32 / 10.0
+            );
             println!("Humidity (Sensor): {} %RH", sensor_data.humidity);
             println!();
         }
