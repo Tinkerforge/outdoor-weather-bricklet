@@ -35,7 +35,59 @@ ow.on(Tinkerforge.BrickletOutdoorWeather.CALLBACK_STATION_DATA,
         console.log('Wind Speed (Station): ' + windSpeed/10.0 + ' m/s');
         console.log('Gust Speed (Station): ' + gustSpeed/10.0 + ' m/s');
         console.log('Rain (Station): ' + rain/10.0 + ' mm');
-        console.log('Wind Direction (Station): ' + windDirection);
+
+        if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_N) {
+            console.log('Wind Direction (Station): N');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NNE) {
+            console.log('Wind Direction (Station): NNE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NE) {
+            console.log('Wind Direction (Station): NE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ENE) {
+            console.log('Wind Direction (Station): ENE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_E) {
+            console.log('Wind Direction (Station): E');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ESE) {
+            console.log('Wind Direction (Station): ESE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SE) {
+            console.log('Wind Direction (Station): SE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SSE) {
+            console.log('Wind Direction (Station): SSE');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_S) {
+            console.log('Wind Direction (Station): S');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SSW) {
+            console.log('Wind Direction (Station): SSW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SW) {
+            console.log('Wind Direction (Station): SW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_WSW) {
+            console.log('Wind Direction (Station): WSW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_W) {
+            console.log('Wind Direction (Station): W');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_WNW) {
+            console.log('Wind Direction (Station): WNW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NW) {
+            console.log('Wind Direction (Station): NW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NNW) {
+            console.log('Wind Direction (Station): NNW');
+        }
+        else if(windDirection === Tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ERROR) {
+            console.log('Wind Direction (Station): Error');
+        }
+
         console.log('Battery Low (Station): ' + batteryLow);
         console.log();
     }

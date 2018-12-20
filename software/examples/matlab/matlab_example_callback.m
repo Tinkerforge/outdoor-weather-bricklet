@@ -36,7 +36,43 @@ function cb_station_data(e)
     fprintf('Wind Speed (Station): %g m/s\n', e.windSpeed/10.0);
     fprintf('Gust Speed (Station): %g m/s\n', e.gustSpeed/10.0);
     fprintf('Rain (Station): %g mm\n', e.rain/10.0);
-    fprintf('Wind Direction (Station): %i\n', e.windDirection);
+
+    if e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_N
+        fprintf('Wind Direction (Station): N\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NNE
+        fprintf('Wind Direction (Station): NNE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NE
+        fprintf('Wind Direction (Station): NE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ENE
+        fprintf('Wind Direction (Station): ENE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_E
+        fprintf('Wind Direction (Station): E\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ESE
+        fprintf('Wind Direction (Station): ESE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SE
+        fprintf('Wind Direction (Station): SE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SSE
+        fprintf('Wind Direction (Station): SSE\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_S
+        fprintf('Wind Direction (Station): S\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SSW
+        fprintf('Wind Direction (Station): SSW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_SW
+        fprintf('Wind Direction (Station): SW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_WSW
+        fprintf('Wind Direction (Station): WSW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_W
+        fprintf('Wind Direction (Station): W\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_WNW
+        fprintf('Wind Direction (Station): WNW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NW
+        fprintf('Wind Direction (Station): NW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_NNW
+        fprintf('Wind Direction (Station): NNW\n');
+    elseif e.windDirection == com.tinkerforge.BrickletOutdoorWeather.WIND_DIRECTION_ERROR
+        fprintf('Wind Direction (Station): Error\n');
+    end
+
     fprintf('Battery Low (Station): %i\n', e.batteryLow);
     fprintf('\n');
 end

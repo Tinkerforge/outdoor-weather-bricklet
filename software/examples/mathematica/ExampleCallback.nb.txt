@@ -26,7 +26,23 @@ StationDataCB[sender_,identifier_,temperature_,humidity_,windSpeed_,gustSpeed_,r
   Print["Wind Speed (Station): "<>ToString[N[Quantity[windSpeed,"m/s/10"]]]];
   Print["Gust Speed (Station): "<>ToString[N[Quantity[gustSpeed,"m/s/10"]]]];
   Print["Rain (Station): "<>ToString[N[Quantity[rain,"mm/10"]]]];
-  Print["Wind Direction (Station): "<>ToString[windDirection]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUN,Print["Wind Direction (Station): N"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUNNE,Print["Wind Direction (Station): NNE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUNE,Print["Wind Direction (Station): NE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUENE,Print["Wind Direction (Station): ENE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUE,Print["Wind Direction (Station): E"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUESE,Print["Wind Direction (Station): ESE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUSE,Print["Wind Direction (Station): SE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUSSE,Print["Wind Direction (Station): SSE"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUS,Print["Wind Direction (Station): S"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUSSW,Print["Wind Direction (Station): SSW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUSW,Print["Wind Direction (Station): SW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUWSW,Print["Wind Direction (Station): WSW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUW,Print["Wind Direction (Station): W"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUWNW,Print["Wind Direction (Station): WNW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUNW,Print["Wind Direction (Station): NW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUNNW,Print["Wind Direction (Station): NNW"]];
+  If[windDirection==Tinkerforge`BrickletOutdoorWeather`WINDUDIRECTIONUERROR,Print["Wind Direction (Station): Error"]];
   Print["Battery Low (Station): "<>ToString[batteryLow]]
  ]
 

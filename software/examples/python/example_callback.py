@@ -17,7 +17,42 @@ def cb_station_data(identifier, temperature, humidity, wind_speed, gust_speed, r
     print("Wind Speed (Station): " + str(wind_speed/10.0) + " m/s")
     print("Gust Speed (Station): " + str(gust_speed/10.0) + " m/s")
     print("Rain (Station): " + str(rain/10.0) + " mm")
-    print("Wind Direction (Station): " + str(wind_direction))
+
+    if wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_N:
+        print("Wind Direction (Station): N")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_NNE:
+        print("Wind Direction (Station): NNE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_NE:
+        print("Wind Direction (Station): NE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_ENE:
+        print("Wind Direction (Station): ENE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_E:
+        print("Wind Direction (Station): E")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_ESE:
+        print("Wind Direction (Station): ESE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_SE:
+        print("Wind Direction (Station): SE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_SSE:
+        print("Wind Direction (Station): SSE")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_S:
+        print("Wind Direction (Station): S")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_SSW:
+        print("Wind Direction (Station): SSW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_SW:
+        print("Wind Direction (Station): SW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_WSW:
+        print("Wind Direction (Station): WSW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_W:
+        print("Wind Direction (Station): W")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_WNW:
+        print("Wind Direction (Station): WNW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_NW:
+        print("Wind Direction (Station): NW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_NNW:
+        print("Wind Direction (Station): NNW")
+    elif wind_direction == BrickletOutdoorWeather.WIND_DIRECTION_ERROR:
+        print("Wind Direction (Station): Error")
+
     print("Battery Low (Station): " + str(battery_low))
     print("")
 

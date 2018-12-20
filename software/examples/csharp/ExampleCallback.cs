@@ -19,7 +19,76 @@ class Example
 		Console.WriteLine("Wind Speed (Station): " + windSpeed/10.0 + " m/s");
 		Console.WriteLine("Gust Speed (Station): " + gustSpeed/10.0 + " m/s");
 		Console.WriteLine("Rain (Station): " + rain/10.0 + " mm");
-		Console.WriteLine("Wind Direction (Station): " + windDirection);
+
+		if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_N)
+		{
+			Console.WriteLine("Wind Direction (Station): N");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NNE)
+		{
+			Console.WriteLine("Wind Direction (Station): NNE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NE)
+		{
+			Console.WriteLine("Wind Direction (Station): NE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ENE)
+		{
+			Console.WriteLine("Wind Direction (Station): ENE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_E)
+		{
+			Console.WriteLine("Wind Direction (Station): E");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ESE)
+		{
+			Console.WriteLine("Wind Direction (Station): ESE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SE)
+		{
+			Console.WriteLine("Wind Direction (Station): SE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SSE)
+		{
+			Console.WriteLine("Wind Direction (Station): SSE");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_S)
+		{
+			Console.WriteLine("Wind Direction (Station): S");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SSW)
+		{
+			Console.WriteLine("Wind Direction (Station): SSW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SW)
+		{
+			Console.WriteLine("Wind Direction (Station): SW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_WSW)
+		{
+			Console.WriteLine("Wind Direction (Station): WSW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_W)
+		{
+			Console.WriteLine("Wind Direction (Station): W");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_WNW)
+		{
+			Console.WriteLine("Wind Direction (Station): WNW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NW)
+		{
+			Console.WriteLine("Wind Direction (Station): NW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NNW)
+		{
+			Console.WriteLine("Wind Direction (Station): NNW");
+		}
+		else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ERROR)
+		{
+			Console.WriteLine("Wind Direction (Station): Error");
+		}
+
 		Console.WriteLine("Battery Low (Station): " + batteryLow);
 		Console.WriteLine("");
 	}

@@ -31,7 +31,43 @@ fn main() -> Result<(), Box<dyn Error>> {
             println!("Wind Speed (Station): {} m/s", station_data.wind_speed as f32 / 10.0);
             println!("Gust Speed (Station): {} m/s", station_data.gust_speed as f32 / 10.0);
             println!("Rain (Station): {} mm", station_data.rain as f32 / 10.0);
-            println!("Wind Direction (Station): {}", station_data.wind_direction);
+
+            if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_N {
+                println!("Wind Direction (Station): N");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_NNE {
+                println!("Wind Direction (Station): NNE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_NE {
+                println!("Wind Direction (Station): NE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_ENE {
+                println!("Wind Direction (Station): ENE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_E {
+                println!("Wind Direction (Station): E");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_ESE {
+                println!("Wind Direction (Station): ESE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_SE {
+                println!("Wind Direction (Station): SE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_SSE {
+                println!("Wind Direction (Station): SSE");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_S {
+                println!("Wind Direction (Station): S");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_SSW {
+                println!("Wind Direction (Station): SSW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_SW {
+                println!("Wind Direction (Station): SW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_WSW {
+                println!("Wind Direction (Station): WSW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_W {
+                println!("Wind Direction (Station): W");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_WNW {
+                println!("Wind Direction (Station): WNW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_NW {
+                println!("Wind Direction (Station): NW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_NNW {
+                println!("Wind Direction (Station): NNW");
+            } else if station_data.wind_direction == OUTDOOR_WEATHER_BRICKLET_WIND_DIRECTION_ERROR {
+                println!("Wind Direction (Station): Error");
+            }
+
             println!("Battery Low (Station): {}", station_data.battery_low);
             println!();
         }

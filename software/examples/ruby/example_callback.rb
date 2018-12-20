@@ -36,7 +36,43 @@ ow.register_callback(BrickletOutdoorWeather::CALLBACK_STATION_DATA) do |identifi
   puts "Wind Speed (Station): #{wind_speed/10.0} m/s"
   puts "Gust Speed (Station): #{gust_speed/10.0} m/s"
   puts "Rain (Station): #{rain/10.0} mm"
-  puts "Wind Direction (Station): #{wind_direction}"
+
+  if wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_N
+    puts "Wind Direction (Station): N"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_NNE
+    puts "Wind Direction (Station): NNE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_NE
+    puts "Wind Direction (Station): NE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_ENE
+    puts "Wind Direction (Station): ENE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_E
+    puts "Wind Direction (Station): E"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_ESE
+    puts "Wind Direction (Station): ESE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_SE
+    puts "Wind Direction (Station): SE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_SSE
+    puts "Wind Direction (Station): SSE"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_S
+    puts "Wind Direction (Station): S"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_SSW
+    puts "Wind Direction (Station): SSW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_SW
+    puts "Wind Direction (Station): SW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_WSW
+    puts "Wind Direction (Station): WSW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_W
+    puts "Wind Direction (Station): W"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_WNW
+    puts "Wind Direction (Station): WNW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_NW
+    puts "Wind Direction (Station): NW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_NNW
+    puts "Wind Direction (Station): NNW"
+  elsif wind_direction == BrickletOutdoorWeather::WIND_DIRECTION_ERROR
+    puts "Wind Direction (Station): Error"
+  end
+
   puts "Battery Low (Station): #{battery_low}"
   puts ''
 end

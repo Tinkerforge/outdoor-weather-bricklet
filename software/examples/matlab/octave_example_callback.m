@@ -35,7 +35,43 @@ function cb_station_data(e)
     fprintf("Wind Speed (Station): %g m/s\n", java2int(e.windSpeed)/10.0);
     fprintf("Gust Speed (Station): %g m/s\n", java2int(e.gustSpeed)/10.0);
     fprintf("Rain (Station): %g mm\n", java2int(e.rain)/10.0);
-    fprintf("Wind Direction (Station): %d\n", e.windDirection);
+
+    if e.windDirection == 0
+        fprintf("Wind Direction (Station): N\n");
+    elseif e.windDirection == 1
+        fprintf("Wind Direction (Station): NNE\n");
+    elseif e.windDirection == 2
+        fprintf("Wind Direction (Station): NE\n");
+    elseif e.windDirection == 3
+        fprintf("Wind Direction (Station): ENE\n");
+    elseif e.windDirection == 4
+        fprintf("Wind Direction (Station): E\n");
+    elseif e.windDirection == 5
+        fprintf("Wind Direction (Station): ESE\n");
+    elseif e.windDirection == 6
+        fprintf("Wind Direction (Station): SE\n");
+    elseif e.windDirection == 7
+        fprintf("Wind Direction (Station): SSE\n");
+    elseif e.windDirection == 8
+        fprintf("Wind Direction (Station): S\n");
+    elseif e.windDirection == 9
+        fprintf("Wind Direction (Station): SSW\n");
+    elseif e.windDirection == 10
+        fprintf("Wind Direction (Station): SW\n");
+    elseif e.windDirection == 11
+        fprintf("Wind Direction (Station): WSW\n");
+    elseif e.windDirection == 12
+        fprintf("Wind Direction (Station): W\n");
+    elseif e.windDirection == 13
+        fprintf("Wind Direction (Station): WNW\n");
+    elseif e.windDirection == 14
+        fprintf("Wind Direction (Station): NW\n");
+    elseif e.windDirection == 15
+        fprintf("Wind Direction (Station): NNW\n");
+    elseif e.windDirection == 255
+        fprintf("Wind Direction (Station): Error\n");
+    end
+
     fprintf("Battery Low (Station): %d\n", e.batteryLow);
     fprintf("\n");
 end

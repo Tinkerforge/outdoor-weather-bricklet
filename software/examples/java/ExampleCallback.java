@@ -34,7 +34,43 @@ public class ExampleCallback {
 				System.out.println("Wind Speed (Station): " + windSpeed/10.0 + " m/s");
 				System.out.println("Gust Speed (Station): " + gustSpeed/10.0 + " m/s");
 				System.out.println("Rain (Station): " + rain/10.0 + " mm");
-				System.out.println("Wind Direction (Station): " + windDirection);
+
+				if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_N) {
+					System.out.println("Wind Direction (Station): N");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NNE) {
+					System.out.println("Wind Direction (Station): NNE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NE) {
+					System.out.println("Wind Direction (Station): NE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ENE) {
+					System.out.println("Wind Direction (Station): ENE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_E) {
+					System.out.println("Wind Direction (Station): E");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ESE) {
+					System.out.println("Wind Direction (Station): ESE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SE) {
+					System.out.println("Wind Direction (Station): SE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SSE) {
+					System.out.println("Wind Direction (Station): SSE");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_S) {
+					System.out.println("Wind Direction (Station): S");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SSW) {
+					System.out.println("Wind Direction (Station): SSW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_SW) {
+					System.out.println("Wind Direction (Station): SW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_WSW) {
+					System.out.println("Wind Direction (Station): WSW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_W) {
+					System.out.println("Wind Direction (Station): W");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_WNW) {
+					System.out.println("Wind Direction (Station): WNW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NW) {
+					System.out.println("Wind Direction (Station): NW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_NNW) {
+					System.out.println("Wind Direction (Station): NNW");
+				} else if(windDirection == BrickletOutdoorWeather.WIND_DIRECTION_ERROR) {
+					System.out.println("Wind Direction (Station): Error");
+				}
+
 				System.out.println("Battery Low (Station): " + batteryLow);
 				System.out.println("");
 			}
