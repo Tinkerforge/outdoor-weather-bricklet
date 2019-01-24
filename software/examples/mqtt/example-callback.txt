@@ -1,0 +1,15 @@
+
+
+# Change XYZ to the UID of your Outdoor Weather Bricklet
+
+setup:
+	# Enable station data callbacks
+	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_station_callback_configuration 
+	# Enable sensor data callbacks
+	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_sensor_callback_configuration 
+	# Handle incoming station data callbacks
+	subscribe to tinkerforge/callback/outdoor_weather_bricklet/XYZ/station_data
+	publish '{"register": true}' to tinkerforge/register/outdoor_weather_bricklet/XYZ/station_data # Register station_data callback
+	# Handle incoming sensor data callbacks
+	subscribe to tinkerforge/callback/outdoor_weather_bricklet/XYZ/sensor_data
+	publish '{"register": true}' to tinkerforge/register/outdoor_weather_bricklet/XYZ/sensor_data # Register sensor_data callback
