@@ -3,3 +3,6 @@
 
 2018-10-04: 2.0.1 (d4d8823)
 - Fix race condition with potential buffer overflow (through bricklib2)
+
+2019-02-05: 2.0.2 (TBD)
+- Remove Station/Sensor from list of identifiers after 12h with no data

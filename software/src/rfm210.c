@@ -32,6 +32,8 @@
 
 #include "communication.h"
 
+// Wait for 12h for a packet until we delete a weather station/sensor
+#define RFM210_MAX_WAIT (1000*60*60*12)
 
 // OOK format:
 // High:   |^|__| -> 500us  | 1000us
@@ -61,7 +63,23 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) rf
 	rfm210.timestamp_end = (rfm210.timestamp_end+1) & RFM210_TIMESTAMP_MASK;
 }
 
+bool rfm210_check_station_timeout(const uint8_t id) {
+	if(system_timer_is_time_elapsed_ms(rfm210.payload_station_last_change[id], RFM210_MAX_WAIT)) {
+		rfm210.payload_station_last_change[id] = 0;
+		return true;
+	}
 
+	return false;
+}
+
+bool rfm210_check_sensor_timeout(const uint8_t id) {
+	if(system_timer_is_time_elapsed_ms(rfm210.payload_sensor_last_change[id], RFM210_MAX_WAIT)) {
+		rfm210.payload_sensor_last_change[id] = 0;
+		return true;
+	}
+
+	return false;
+}
 
 static uint8_t rfm210_crc8(const uint8_t *data, const uint8_t length) {
 	uint8_t crc = 0;

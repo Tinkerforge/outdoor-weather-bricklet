@@ -76,6 +76,9 @@ typedef struct {
 	bool callback_enabled_sensor;
 } RFM210;
 
+bool rfm210_check_station_timeout(const uint8_t id);
+bool rfm210_check_sensor_timeout(const uint8_t id);
+
 void rfm210_fill_packet_station(RFM210 *rfm210, const uint16_t id, RFM210PacketStation *packet);
 void rfm210_fill_packet_sensor(RFM210 *rfm210, const uint16_t id, RFM210PacketSensor *packet);
 void rfm210_init(RFM210 *rfm210);

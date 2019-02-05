@@ -50,6 +50,9 @@ BootloaderHandleMessageResponse get_station_identifiers_low_level(const GetStati
 	uint8_t response_index = 0;
 	for(; rfm210.current_id_index_station < RFM210_MAX_DEVICES; rfm210.current_id_index_station++) {
 		if(rfm210.payload_station_last_change[rfm210.current_id_index_station] != 0) {
+			if(rfm210_check_station_timeout(rfm210.current_id_index_station)) {
+				continue;
+			}
 			response->identifiers_chunk_data[response_index] = rfm210.current_id_index_station;
 			response_index++;
 			if(response_index == 60) {
@@ -77,6 +80,9 @@ BootloaderHandleMessageResponse get_sensor_identifiers_low_level(const GetSensor
 	uint8_t response_index = 0;
 	for(; rfm210.current_id_index_sensor < RFM210_MAX_DEVICES; rfm210.current_id_index_sensor++) {
 		if(rfm210.payload_sensor_last_change[rfm210.current_id_index_sensor] != 0) {
+			if(rfm210_check_sensor_timeout(rfm210.current_id_index_sensor)) {
+				continue;
+			}
 			response->identifiers_chunk_data[response_index] = rfm210.current_id_index_sensor;
 			response_index++;
 			if(response_index == 60) {
@@ -103,6 +109,10 @@ BootloaderHandleMessageResponse get_station_data(const GetStationData *data, Get
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
+	if(rfm210_check_station_timeout(data->identifier)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
 	response->header.length = sizeof(GetStationData_Response);
 
 	RFM210PacketStation packet;
@@ -121,6 +131,10 @@ BootloaderHandleMessageResponse get_station_data(const GetStationData *data, Get
 
 BootloaderHandleMessageResponse get_sensor_data(const GetSensorData *data, GetSensorData_Response *response) {
 	if(rfm210.payload_sensor_last_change[data->identifier] == 0) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if(rfm210_check_sensor_timeout(data->identifier)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
