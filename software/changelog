@@ -6,3 +6,6 @@
 
 2019-02-05: 2.0.2 (4c31cac)
 - Remove Station/Sensor from list of identifiers after 12h with no data
+
+2019-05-29: 2.0.3 (TBD)
+- Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
