@@ -41,6 +41,8 @@
 
 
 // --- SPITFP ---
+#define SPITFP_NOT_ALLOWED_TO_DISABLE_IRQ
+
 #define SPITFP_USIC_CHANNEL         USIC0_CH0
 #define SPITFP_USIC                 XMC_SPI0_CH0
 
