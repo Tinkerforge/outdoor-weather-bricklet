@@ -189,7 +189,7 @@ bool handle_station_data_callback(void) {
 		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(StationData_Callback), FID_CALLBACK_STATION_DATA);
 		uint16_t id;
 		for(id = 0; id < RFM210_MAX_DEVICES; id++) {
-			if(rfm210.payload_station_last_change[id] != 0 && (((uint32_t)(rfm210.payload_station_last_change[id] - last_change[id])) > 4)) {
+			if(rfm210.payload_station_last_change[id] != 0 && (((uint32_t)(rfm210.payload_station_last_change[id] - last_change[id])) > RFM210_MIN_MESSAGE_GAP_MS)) {
 				last_change[id] = rfm210.payload_station_last_change[id];
 
 				RFM210PacketStation packet;
@@ -236,7 +236,7 @@ bool handle_sensor_data_callback(void) {
 		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(SensorData_Callback), FID_CALLBACK_SENSOR_DATA);
 		uint16_t id;
 		for(id = 0; id < RFM210_MAX_DEVICES; id++) {
-			if(rfm210.payload_sensor_last_change[id] != 0 && (((uint32_t)(rfm210.payload_sensor_last_change[id] - last_change[id])) > 4)) {
+			if(rfm210.payload_sensor_last_change[id] != 0 && (((uint32_t)(rfm210.payload_sensor_last_change[id] - last_change[id])) > RFM210_MIN_MESSAGE_GAP_MS)) {
 				last_change[id] = rfm210.payload_sensor_last_change[id];
 
 				RFM210PacketSensor packet;

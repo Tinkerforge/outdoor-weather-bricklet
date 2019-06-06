@@ -34,6 +34,8 @@
 #define RFM210_TIMESTAMP_SIZE 2048
 #define RFM210_TIMESTAMP_MASK (RFM210_TIMESTAMP_SIZE-1) // Note: Always use power of 2 here
 
+#define RFM210_MIN_MESSAGE_GAP_MS 500
+
 typedef struct {
 	int16_t temperature;
 	uint8_t humidity;

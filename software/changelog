@@ -9,3 +9,6 @@
 
 2019-05-29: 2.0.3 (232da9b)
 - Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
+
+2019-06-06: 2.0.4 (<unknown>)
+- Increase minimum gap between messages to filter duplicates
