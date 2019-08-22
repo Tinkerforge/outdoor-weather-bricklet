@@ -96,13 +96,13 @@ int main(void) {
 	// Register station data callback to function cb_station_data
 	outdoor_weather_register_callback(&ow,
 	                                  OUTDOOR_WEATHER_CALLBACK_STATION_DATA,
-	                                  (void *)cb_station_data,
+	                                  (void (*)(void))cb_station_data,
 	                                  NULL);
 
 	// Register sensor data callback to function cb_sensor_data
 	outdoor_weather_register_callback(&ow,
 	                                  OUTDOOR_WEATHER_CALLBACK_SENSOR_DATA,
-	                                  (void *)cb_sensor_data,
+	                                  (void (*)(void))cb_sensor_data,
 	                                  NULL);
 
 	printf("Press key to exit\n");
