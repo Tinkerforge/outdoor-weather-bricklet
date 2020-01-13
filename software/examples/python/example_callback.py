@@ -82,5 +82,5 @@ if __name__ == "__main__":
     # Register sensor data callback to function cb_sensor_data
     ow.register_callback(ow.CALLBACK_SENSOR_DATA, cb_sensor_data)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()
