@@ -2,10 +2,10 @@
 
 setup:
 	# Enable station data callbacks
-	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_station_callback_configuration 
+	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_station_callback_configuration
 
 	# Enable sensor data callbacks
-	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_sensor_callback_configuration 
+	publish '{"enable_callback": true}' to tinkerforge/request/outdoor_weather_bricklet/XYZ/set_sensor_callback_configuration
 
 	# Handle incoming station data callbacks
 	subscribe to tinkerforge/callback/outdoor_weather_bricklet/XYZ/station_data
