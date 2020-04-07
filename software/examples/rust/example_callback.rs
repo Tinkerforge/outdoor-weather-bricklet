@@ -13,10 +13,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected.
 
     // Enable station data callbacks
-    ow.set_station_callback_configuration(true);
+    ow.set_station_callback_configuration(true).recv()?;
 
     // Enable sensor data callbacks
-    ow.set_sensor_callback_configuration(true);
+    ow.set_sensor_callback_configuration(true).recv()?;
 
     let station_data_receiver = ow.get_station_data_callback_receiver();
 
