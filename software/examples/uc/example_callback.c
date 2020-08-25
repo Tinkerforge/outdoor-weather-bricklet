@@ -1,13 +1,9 @@
-
-
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_outdoor_weather.h"
 
 #define UID "XYZ" // Change XYZ to the UID of your Outdoor Weather Bricklet
 
 void check(int rc, const char* msg);
-
-
 
 // Callback function for station data callback
 void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
@@ -73,7 +69,6 @@ void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 	tf_hal_printf("Humidity (Sensor): %u %%RH\n", humidity);
 	tf_hal_printf("\n");
 }
-
 
 TF_OutdoorWeather ow;
 
