@@ -76,7 +76,6 @@ void example_setup(TF_HalContext *hal) {
 	// Create device object
 	check(tf_outdoor_weather_create(&ow, UID, hal), "create device object");
 
-
 	// Enable station data callbacks
 	check(tf_outdoor_weather_set_station_callback_configuration(&ow,
 	                                                            true), "call set_station_callback_configuration");
@@ -87,14 +86,13 @@ void example_setup(TF_HalContext *hal) {
 
 	// Register station data callback to function station_data_handler
 	tf_outdoor_weather_register_station_data_callback(&ow,
-	                                                 station_data_handler,
-	                                                 NULL);
+	                                                  station_data_handler,
+	                                                  NULL);
 
 	// Register sensor data callback to function sensor_data_handler
 	tf_outdoor_weather_register_sensor_data_callback(&ow,
-	                                                sensor_data_handler,
-	                                                NULL);
-
+	                                                 sensor_data_handler,
+	                                                 NULL);
 }
 
 void example_loop(TF_HalContext *hal) {
