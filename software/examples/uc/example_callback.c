@@ -5,11 +5,16 @@
 
 void check(int rc, const char* msg);
 
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
+
 // Callback function for station data callback
-void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
-                          int16_t temperature, uint8_t humidity, uint32_t wind_speed,
-                          uint32_t gust_speed, uint32_t rain, uint8_t wind_direction,
-                          bool battery_low, void *user_data) {
+static void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
+                                 int16_t temperature, uint8_t humidity,
+                                 uint32_t wind_speed, uint32_t gust_speed, uint32_t rain,
+                                 uint8_t wind_direction, bool battery_low,
+                                 void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Identifier (Station): %u\n", identifier);
@@ -60,8 +65,8 @@ void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 }
 
 // Callback function for sensor data callback
-void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
-                         int16_t temperature, uint8_t humidity, void *user_data) {
+static void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
+                                int16_t temperature, uint8_t humidity, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Identifier (Sensor): %u\n", identifier);
@@ -70,7 +75,7 @@ void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 	tf_hal_printf("\n");
 }
 
-TF_OutdoorWeather ow;
+static TF_OutdoorWeather ow;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object
