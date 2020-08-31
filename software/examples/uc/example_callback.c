@@ -17,9 +17,9 @@ static void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
                                  void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Identifier (Station): %u\n", identifier);
+	tf_hal_printf("Identifier (Station): %I8u\n", identifier);
 	tf_hal_printf("Temperature (Station): %d 1/%d °C\n", temperature, 10.0);
-	tf_hal_printf("Humidity (Station): %u %%RH\n", humidity);
+	tf_hal_printf("Humidity (Station): %I8u %%RH\n", humidity);
 	tf_hal_printf("Wind Speed (Station): %d 1/%d m/s\n", wind_speed, 10.0);
 	tf_hal_printf("Gust Speed (Station): %d 1/%d m/s\n", gust_speed, 10.0);
 	tf_hal_printf("Rain (Station): %d 1/%d mm\n", rain, 10.0);
@@ -69,9 +69,9 @@ static void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
                                 int16_t temperature, uint8_t humidity, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Identifier (Sensor): %u\n", identifier);
+	tf_hal_printf("Identifier (Sensor): %I8u\n", identifier);
 	tf_hal_printf("Temperature (Sensor): %d 1/%d °C\n", temperature, 10.0);
-	tf_hal_printf("Humidity (Sensor): %u %%RH\n", humidity);
+	tf_hal_printf("Humidity (Sensor): %I8u %%RH\n", humidity);
 	tf_hal_printf("\n");
 }
 
