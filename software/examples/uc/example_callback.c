@@ -22,11 +22,11 @@ static void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Identifier (Station): %I8u\n", identifier);
-	tf_hal_printf("Temperature (Station): %d 1/%d °C\n", temperature, 10.0);
+	tf_hal_printf("Temperature (Station): %d 1/%d °C\n", temperature, 10);
 	tf_hal_printf("Humidity (Station): %I8u %%RH\n", humidity);
-	tf_hal_printf("Wind Speed (Station): %d 1/%d m/s\n", wind_speed, 10.0);
-	tf_hal_printf("Gust Speed (Station): %d 1/%d m/s\n", gust_speed, 10.0);
-	tf_hal_printf("Rain (Station): %d 1/%d mm\n", rain, 10.0);
+	tf_hal_printf("Wind Speed (Station): %d 1/%d m/s\n", wind_speed, 10);
+	tf_hal_printf("Gust Speed (Station): %d 1/%d m/s\n", gust_speed, 10);
+	tf_hal_printf("Rain (Station): %d 1/%d mm\n", rain, 10);
 
 	if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_N) {
 		tf_hal_printf("Wind Direction (Station): N\n");
@@ -74,7 +74,7 @@ static void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Identifier (Sensor): %I8u\n", identifier);
-	tf_hal_printf("Temperature (Sensor): %d 1/%d °C\n", temperature, 10.0);
+	tf_hal_printf("Temperature (Sensor): %d 1/%d °C\n", temperature, 10);
 	tf_hal_printf("Humidity (Sensor): %I8u %%RH\n", humidity);
 	tf_hal_printf("\n");
 }
