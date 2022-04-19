@@ -9,8 +9,8 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 // Callback function for station data callback
@@ -28,39 +28,39 @@ static void station_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 	tf_hal_printf("Gust Speed (Station): %d 1/%d m/s\n", gust_speed, 10);
 	tf_hal_printf("Rain (Station): %d 1/%d mm\n", rain, 10);
 
-	if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_N) {
+	if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_N) {
 		tf_hal_printf("Wind Direction (Station): N\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NNE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NNE) {
 		tf_hal_printf("Wind Direction (Station): NNE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NE) {
 		tf_hal_printf("Wind Direction (Station): NE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ENE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ENE) {
 		tf_hal_printf("Wind Direction (Station): ENE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_E) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_E) {
 		tf_hal_printf("Wind Direction (Station): E\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ESE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ESE) {
 		tf_hal_printf("Wind Direction (Station): ESE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SE) {
 		tf_hal_printf("Wind Direction (Station): SE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SSE) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SSE) {
 		tf_hal_printf("Wind Direction (Station): SSE\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_S) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_S) {
 		tf_hal_printf("Wind Direction (Station): S\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SSW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SSW) {
 		tf_hal_printf("Wind Direction (Station): SSW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_SW) {
 		tf_hal_printf("Wind Direction (Station): SW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_WSW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_WSW) {
 		tf_hal_printf("Wind Direction (Station): WSW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_W) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_W) {
 		tf_hal_printf("Wind Direction (Station): W\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_WNW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_WNW) {
 		tf_hal_printf("Wind Direction (Station): WNW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NW) {
 		tf_hal_printf("Wind Direction (Station): NW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NNW) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_NNW) {
 		tf_hal_printf("Wind Direction (Station): NNW\n");
-	} else if(wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ERROR) {
+	} else if (wind_direction == TF_OUTDOOR_WEATHER_WIND_DIRECTION_ERROR) {
 		tf_hal_printf("Wind Direction (Station): Error\n");
 	}
 
@@ -81,7 +81,7 @@ static void sensor_data_handler(TF_OutdoorWeather *device, uint8_t identifier,
 
 static TF_OutdoorWeather ow;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_outdoor_weather_create(&ow, UID, hal), "create device object");
 
@@ -104,7 +104,7 @@ void example_setup(TF_HalContext *hal) {
 	                                                 NULL);
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }
